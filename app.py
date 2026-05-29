@@ -1,8 +1,11 @@
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 from dotenv import load_dotenv
 from anthropic import Anthropic
 import markdown
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+from io import BytesIO
 
 load_dotenv()
 
@@ -16,6 +19,7 @@ def home():
     ai_response = None
 
     if request.method == "POST":
+        category = request.form.get("category")
         user_problem = request.form.get("problem")
 
         message = client.messages.create(
@@ -41,6 +45,7 @@ def home():
                     6. Final note of Encouragement: A motivational message to encourage the user to take action. Give some additional tips too.
 
                     User Problem: {user_problem}
+                    Category: {category}
                     """
 
                 }
@@ -50,6 +55,35 @@ def home():
         ai_response = markdown.markdown(message.content[0].text)
 
     return render_template("index.html", ai_response=ai_response)
+
+
+@app.route("/download-pdf", methods=["POST"])
+def download_pdf():
+    plan_text = request.form.get("plan_text")
+
+    buffer = BytesIO()
+
+    pdf = SimpleDocTemplate(buffer)
+    styles = getSampleStyleSheet()
+    story = []
+
+    story.append(Paragraph("AI Life OS Action Plan", styles['Title']))
+    story.append(Spacer(1, 12))
+
+    for line in plan_text.split("\n"):
+        if line.strip():
+            story.append(Paragraph(line, styles["BodyText"]))
+            story.append(Spacer(1, 6))
+
+    pdf.build(story)
+
+    buffer.seek(0)
+    return send_file(
+        buffer,
+        as_attachment=True,
+        download_name="ai_life_os_action_plan.pdf",
+        mimetype="application/pdf"
+    )
 
 
 if __name__ == "__main__":

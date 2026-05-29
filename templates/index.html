@@ -1,0 +1,29 @@
+<html>
+<head>
+    <title>AI Life OS</title>
+</head>
+
+<body>
+    <h1>AI Life OS</h1>
+    <p>Your personal AI planning assistant.</p>
+
+    <form method="POST">
+        <textarea 
+            name="problem" 
+            rows="8" 
+            cols="60" 
+            placeholder="Let me know what you're dealing with..."
+            required></textarea>
+        <br><br>
+        <button type="submit">Generate Action Plan</button>
+    </form>
+
+    {% if ai_response %}
+        <h2>Your AI Action Plan</h2>
+      <div class="response">
+    {{ ai_response | safe }}
+</div>
+
+    {% endif %}
+</body>
+</html>

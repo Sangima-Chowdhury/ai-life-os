@@ -44,6 +44,7 @@ def home():
 
     if request.method == "POST":
         category = request.form.get("category")
+        print("CATEGORY =", category)
         user_problem = request.form.get("problem")
 
         message = client.messages.create(

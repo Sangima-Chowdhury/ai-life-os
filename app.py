@@ -1,3 +1,4 @@
+import json
 import os
 from flask import Flask, render_template, request, send_file
 from dotenv import load_dotenv
@@ -12,6 +13,29 @@ load_dotenv()
 app = Flask(__name__)
 
 client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+
+
+def load_plans():
+    try:
+        with open("plans.json", "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return []
+
+
+def save_plan(category, problem, plan):
+    plans = load_plans()
+
+    new_plan = {
+        "category": category,
+        "problem": problem,
+        "plan": plan
+    }
+
+    plans.append(new_plan)
+
+    with open("plans.json", "w") as file:
+        json.dump(plans, file, indent=4)
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -53,8 +77,15 @@ def home():
         )
 
         ai_response = markdown.markdown(message.content[0].text)
+        save_plan(category, user_problem, ai_response)
 
-    return render_template("index.html", ai_response=ai_response)
+    saved_plans = load_plans()
+
+    return render_template(
+        "index.html",
+        ai_response=ai_response,
+        saved_plans=saved_plans
+    )
 
 
 @app.route("/download-pdf", methods=["POST"])

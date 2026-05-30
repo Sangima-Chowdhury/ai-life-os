@@ -132,7 +132,7 @@ select {
         </button>
 
     </form>
-
+    
     {% if ai_response %}
         <div class="response">
             {{ ai_response | safe }}
@@ -143,5 +143,17 @@ select {
 </form>
 {% endif %}
 
+{% if saved_plans %}
+<div class="response">
+    <h2>Previous Plans</h2>
+
+    {% for plan in saved_plans[-5:] %}
+        <h3>{{ plan.category }}</h3>
+        <p><strong>Problem:</strong> {{ plan.problem }}</p>
+        <hr>
+    {% endfor %}
+</div>
+{% endif %}
+
 </body>
-</html>
+</html> 

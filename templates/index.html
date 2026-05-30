@@ -30,10 +30,21 @@
             flex-direction: column;
             gap: 15px;
         }
+        
+        .nav-links {
+            text-align: center;
+            margin-bottom: 25px;
+        }
 
+        .nav-links a {
+            color: #84c5fd;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 25px;
+        }
 select {
     padding: 12px;
-    border-radius: 10p;
+    border-radius: 10px;
     border: none;
     font-size: 16px;
 }
@@ -90,13 +101,25 @@ select {
     </style>
 </head>
 
+
 <body>
 
     <h1>🧠 AI Life OS</h1>
 
+    {% if username %}
+    <p class="subtitle">Welcome, {{ username }} 👋</p>
+{% endif %}
+
+
     <p class="subtitle">
         Your personal AI coach for life, career, productivity and growth.
     </p>
+
+    <div class="nav-links">
+        <a href="/register">Register</a> 
+        ||
+        <a href="/login">Login</a>
+    </div>
 
     <form method="POST">
 

@@ -1,0 +1,10 @@
+[
+    {
+        "username": "San",
+        "password": "scrypt:32768:8:1$XyGGYtEExRKnV2aa$cb616093354def73b1581939569fc5d0c2712eb1aad1a88cdce55a886c639cd805ecddcec5bd92509e7145db6907291c104d23f081a27de2d7187f33fb6c0d2d"
+    },
+    {
+        "username": "san",
+        "password": "scrypt:32768:8:1$W6dKEw07KBH1Mybd$b1b7179e327ec3a037add030fa57ba5d3d4531baea07f31d595d214e266fe497fade1952c3af7e7dba073213152a11d172762f256b4718a151b70891cd7cbe73"
+    }
+]

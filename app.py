@@ -1,6 +1,7 @@
+from werkzeug.security import generate_password_hash, check_password_hash
 import json
 import os
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, session, redirect, url_for
 from dotenv import load_dotenv
 from anthropic import Anthropic
 import markdown
@@ -11,6 +12,8 @@ from io import BytesIO
 load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = "temporary-secret-key"
+
 
 client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
@@ -36,6 +39,19 @@ def save_plan(category, problem, plan):
 
     with open("plans.json", "w") as file:
         json.dump(plans, file, indent=4)
+
+
+def load_users():
+    try:
+        with open("users.json", "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return []
+
+
+def save_users(users):
+    with open("users.json", "w") as file:
+        json.dump(users, file, indent=4)
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -85,7 +101,8 @@ def home():
     return render_template(
         "index.html",
         ai_response=ai_response,
-        saved_plans=saved_plans
+        saved_plans=saved_plans,
+        username=session.get("username")
     )
 
 
@@ -116,6 +133,50 @@ def download_pdf():
         download_name="ai_life_os_action_plan.pdf",
         mimetype="application/pdf"
     )
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        users = load_users()
+
+        for user in users:
+            if user["username"] == username:
+                return "Username already exists. Please choose a different one."
+
+        hashed_password = generate_password_hash(password)
+
+        users.append({
+            "username": username,
+            "password": hashed_password
+        })
+        save_users(users)
+
+        return redirect(url_for("home"))
+
+    return render_template("register.html")
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        users = load_users()
+
+        for user in users:
+
+            if user["username"] == username and check_password_hash(user["password"], password):
+                session["username"] = username
+                return redirect(url_for("home"))
+        return "Invalid username or password. Please try again."
+    return render_template("login.html")
 
 
 if __name__ == "__main__":

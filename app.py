@@ -26,10 +26,12 @@ def load_plans():
         return []
 
 
-def save_plan(category, problem, plan):
+def save_plan(username, category, problem, plan):
     plans = load_plans()
 
     new_plan = {
+        "id": len(plans) + 1,
+        "username": username,
         "category": category,
         "problem": problem,
         "plan": plan
@@ -94,9 +96,13 @@ def home():
         )
 
         ai_response = markdown.markdown(message.content[0].text)
-        save_plan(category, user_problem, ai_response)
+        save_plan(session.get("username"), category, user_problem, ai_response)
 
-    saved_plans = load_plans()
+    all_plans = load_plans()
+    username = session.get("username")
+
+    saved_plans = [plan for plan in all_plans if plan.get(
+        "username") == username]
 
     return render_template(
         "index.html",
@@ -177,6 +183,26 @@ def login():
                 return redirect(url_for("home"))
         return "Invalid username or password. Please try again."
     return render_template("login.html")
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("home"))
+
+
+@app.route("/delete-plan/<int:plan_id>", methods=["POST"])
+def delete_plan(plan_id):
+    plans = load_plans()
+    username = session.get("username")
+
+    updated_plans = [plan for plan in plans
+                     if not (plan.get("id") == plan_id and plan.get("username") == username)]
+
+    with open("plans.json", "w") as file:
+        json.dump(updated_plans, file, indent=4)
+
+        return redirect(url_for("home"))
 
 
 if __name__ == "__main__":

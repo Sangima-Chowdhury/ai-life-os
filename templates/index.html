@@ -189,6 +189,7 @@ select {
         <h3>{{ plan.category }}</h3>
         <p><strong>Problem:</strong> {{ plan.problem }}</p>
         <form action="/delete-plan/{{ plan.id }}" method="POST">
+        <a href="/plan/{{ plan.id }}">View Plan</a>
             <button type="submit">Delete</button>
         </form>
         <hr>

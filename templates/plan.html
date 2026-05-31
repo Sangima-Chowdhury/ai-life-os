@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Plan - AI Life OS</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+            max-width: 900px;
+            margin: auto;
+            padding: 40px;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 15px;
+            line-height: 1.8;
+        }
+
+        a {
+            color: #93c5fd;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="/">← Back to Dashboard</a>
+
+    <div class="card">
+        <h1>{{ plan.category }}</h1>
+        <p><strong>Problem:</strong> {{ plan.problem }}</p>
+
+        <hr>
+
+        <div>
+            {{ plan.plan | safe }}
+        </div>
+    </div>
+
+</body>
+</html>

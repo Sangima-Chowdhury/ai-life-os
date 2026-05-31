@@ -32,20 +32,15 @@ def load_plans():
 
 
 def save_plan(username, category, problem, plan):
-    plans = load_plans()
+    new_plan = Plan(
+        username=username,
+        category=category,
+        problem=problem,
+        plan=plan
+    )
 
-    new_plan = {
-        "id": len(plans) + 1,
-        "username": username,
-        "category": category,
-        "problem": problem,
-        "plan": plan
-    }
-
-    plans.append(new_plan)
-
-    with open("plans.json", "w") as file:
-        json.dump(plans, file, indent=4)
+    db.session.add(new_plan)
+    db.session.commit()
 
 
 def load_users():
@@ -65,9 +60,13 @@ def save_users(users):
 def home():
     ai_response = None
 
+    username = session.get("username")
+    saved_plans = []
+
     if request.method == "POST":
         category = request.form.get("category")
         print("CATEGORY =", category)
+
         user_problem = request.form.get("problem")
 
         message = client.messages.create(
@@ -77,7 +76,7 @@ def home():
                 {
                     "role": "user",
                     "content": f"""
-                    You are an AI Life OS assistant.
+                        You are an AI Life OS assistant.
 
                     the user will share a life, career, study, productivity or personal problem.
 
@@ -103,18 +102,14 @@ def home():
         ai_response = markdown.markdown(message.content[0].text)
         save_plan(session.get("username"), category, user_problem, ai_response)
 
-    all_plans = load_plans()
-    username = session.get("username")
+        username = session.get("username")
 
-    saved_plans = [plan for plan in all_plans if plan.get(
-        "username") == username]
+        if username:
+            saved_plans = Plan.query.filter_by(username=username).all()
+        else:
+            saved_plans = []
 
-    return render_template(
-        "index.html",
-        ai_response=ai_response,
-        saved_plans=saved_plans,
-        username=session.get("username")
-    )
+    return render_template("index.html", ai_response=ai_response, saved_plans=saved_plans, username=username)
 
 
 @app.route("/download-pdf", methods=["POST"])
@@ -196,16 +191,32 @@ def logout():
 
 @app.route("/delete-plan/<int:plan_id>", methods=["POST"])
 def delete_plan(plan_id):
-    plans = load_plans()
     username = session.get("username")
 
-    updated_plans = [plan for plan in plans
-                     if not (plan.get("id") == plan_id and plan.get("username") == username)]
-
-    with open("plans.json", "w") as file:
-        json.dump(updated_plans, file, indent=4)
+    plan = Plan.query.filter_by(
+        id=plan_id,
+        username=username
+    ).first()
+    if plan:
+        db.session.delete(plan)
+        db.session.commit()
 
         return redirect(url_for("home"))
+
+
+@app.route("/plan/<int:plan_id>")
+def view_plan(plan_id):
+    username = session.get("username")
+
+    plan = Plan.query.filter_by(
+        id=plan_id,
+        username=username
+    ).first()
+
+    if not plan:
+        return "Plan not found."
+
+    return render_template("plan.html", plan=plan)
 
 
 if __name__ == "__main__":

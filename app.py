@@ -13,7 +13,7 @@ from io import BytesIO
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = "temporary-secret-key"
+app.secret_key = os.getenv("SECRET_KEY")
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///ai_life_os.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -72,6 +72,7 @@ def home():
 
         user_problem = request.form.get("problem")
 
+    try:
         message = client.messages.create(
             model="claude-haiku-4-5",
             max_tokens=1000,
@@ -102,15 +103,18 @@ def home():
             ]
         )
 
+    except Exception as e:
+        return f"Claude Error: {str(e)}"
+
         ai_response = markdown.markdown(message.content[0].text)
         save_plan(session.get("username"), category, user_problem, ai_response)
 
         username = session.get("username")
 
-        if username:
-            saved_plans = Plan.query.filter_by(username=username).all()
-        else:
-            saved_plans = []
+    if username:
+        saved_plans = Plan.query.filter_by(username=username).all()
+    else:
+        saved_plans = []
 
     return render_template("index.html", ai_response=ai_response, saved_plans=saved_plans, username=username)
 
@@ -204,7 +208,7 @@ def delete_plan(plan_id):
         db.session.delete(plan)
         db.session.commit()
 
-        return redirect(url_for("home"))
+    return redirect(url_for("home"))
 
 
 @app.route("/plan/<int:plan_id>")

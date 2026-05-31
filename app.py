@@ -153,19 +153,17 @@ def register():
         username = request.form.get("username")
         password = request.form.get("password")
 
-        users = load_users()
+        existing_user = User.query.filter_by(username=username).first()
 
-        for user in users:
-            if user["username"] == username:
-                return "Username already exists. Please choose a different one."
+        if existing_user:
+            return "Username already exists. Please choose a different one."
 
         hashed_password = generate_password_hash(password)
 
-        users.append({
-            "username": username,
-            "password": hashed_password
-        })
-        save_users(users)
+        new_user = User(username=username, password=hashed_password)
+
+        db.session.add(new_user)
+        db.session.commit()
 
         return redirect(url_for("home"))
 
@@ -179,14 +177,14 @@ def login():
         username = request.form.get("username")
         password = request.form.get("password")
 
-        users = load_users()
+        user = User.query.filter_by(username=username).first()
 
-        for user in users:
+        if user and check_password_hash(user.password, password):
+            session["username"] = username
+            return redirect(url_for("home"))
 
-            if user["username"] == username and check_password_hash(user["password"], password):
-                session["username"] = username
-                return redirect(url_for("home"))
         return "Invalid username or password. Please try again."
+
     return render_template("login.html")
 
 

@@ -118,9 +118,6 @@ def home():
         except Exception as e:
             return f"Claude Error: {str(e)}"
 
-    if username:
-        saved_plans = Plan.query.filter_by(username=username).all()
-
     return render_template(
         "index.html",
         ai_response=ai_response,

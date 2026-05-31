@@ -102,11 +102,11 @@ def home():
             ]
         )
 
-    except Exception as e:
-        return f"Claude Error: {str(e)}"
-
         ai_response = markdown.markdown(message.content[0].text)
         save_plan(session.get("username"), category, user_problem, ai_response)
+
+    except Exception as e:
+        return f"Claude Error: {str(e)}"
 
         username = session.get("username")
 

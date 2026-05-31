@@ -1,5 +1,3 @@
-from email.mime import message
-
 from models import db, User, Plan
 from werkzeug.security import generate_password_hash, check_password_hash
 import json

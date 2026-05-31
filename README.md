@@ -1,81 +1,111 @@
-AI Life OS
+# 🧠 AI Life OS
 
-AI Life OS is an AI-powered web application that helps users create practical action plans for life, career, study, productivity and personal goals.
+AI Life OS is an AI-powered web application that helps users transform goals, challenges, and personal problems into practical action plans.
 
-Users can create an account, log in securely, generate AI-powered plans, save them to their dashboard and download plans as PDF documents.
+Whether users need help with career development, productivity, studying, personal growth, or life decisions, AI Life OS generates structured guidance using Anthropic's Claude AI and stores plans in a personalised dashboard.
 
+## 🌐 Live Demo
 
-Live Demo:
+https://ai-life-os-mavj.onrender.com
 
-🌐 https://ai-life-os-mavj.onrender.com
+---
 
-Features:
+## ✨ Features
 
-User Authentication
+### 🔐 Authentication System
 
-User registration
+* User registration
+* Secure login/logout
+* Password hashing with Werkzeug
+* Session management
 
-User login/logout
+### 🤖 AI-Powered Planning
 
-Password hashing with Werkzeug
+* Anthropic Claude integration
+* Personalised action plans
+* Structured recommendations
+* Practical next steps
+* Resource suggestions
+* 7-day action plans
 
-Session management
-AI Plan Generation
-Anthropic Claude integration
-Personalised action plans
-Structured recommendations
-Career, study, productivity and life planning support
-Plan Management
-Save generated plans
-View previous plans
-Individual plan detail pages
-User-specific dashboards
-PDF Export
-Download plans as PDF files
-Share or save action plans offline
-Database
-SQLAlchemy ORM
-SQLite database
-Persistent user accounts
-Persistent plan storage
-Technologies Used
-Backend
-Python
-Flask
-SQLAlchemy
-Frontend
-HTML
-CSS
-Jinja2 Templates
-AI Integration
-Anthropic Claude API
-Deployment
-Git
-GitHub
-Render
+### 📚 Plan Management
 
+* Save plans to user account
+* View previous plans
+* Dedicated plan detail pages
+* Delete unwanted plans
+* User-specific dashboards
 
-What I Learned:
+### 📄 PDF Export
 
+* Download generated plans as PDF documents
+* Share and save plans offline
 
-This project helped me gain practical experience with-
+### 🗄 Database
 
-Flask web development
-User authentication systems
-SQLAlchemy databases
-API integration
-Session management
-CRUD operations
-Git and GitHub workflows
-Cloud deployment using Render
-Future Improvements
-Dark mode
-Plan editing
-Password reset
-Email verification
-User profile settings
-Improved mobile responsiveness
+* SQLAlchemy ORM
+* SQLite database
+* Persistent user accounts
+* Persistent plan storage
 
+---
+
+## 🛠 Tech Stack
+
+### Backend
+
+* Python
+* Flask
+* SQLAlchemy
+
+### Frontend
+
+* HTML
+* CSS
+* Jinja2 Templates
+
+### AI Integration
+
+* Anthropic Claude API
+
+### Database
+
+* SQLite
+
+### Deployment
+
+* Git
+* GitHub
+* Render
+
+---
+
+## 🚀 Key Skills Demonstrated
+
+* Full-stack web development
+* User authentication
+* Database design
+* ORM usage with SQLAlchemy
+* AI API integration
+* CRUD functionality
+* Session management
+* PDF generation
+* Cloud deployment
+* Version control with Git and GitHub
+
+---
+
+## 📈 Future Improvements
+
+* Plan editing
+* Password reset functionality
+* Email verification
+* Dark/light theme switching
+* User profile settings
+* Improved mobile responsiveness
+* PostgreSQL migration
+
+--
 
 <img width="1352" height="878" alt="Screenshot 2026-05-31 at 23 28 08" src="https://github.com/user-attachments/assets/923b3a11-3e26-4299-8ad5-499d264c1491" />
 
@@ -97,5 +127,13 @@ Improved mobile responsiveness
 
 <img width="1352" height="878" alt="Screenshot 2026-05-31 at 23 46 59" src="https://github.com/user-attachments/assets/f560fa05-cde1-4914-bb39-ce6e99b8d95a" />
 
-Author
-Sangima Karim Chowdhury
+
+
+## 👩‍💻 Author
+
+**Sangima Karim Chowdhury**
+
+Aspiring AI Engineer and Python Developer
+
+Built as part of my journey from education into software development and AI engineering.
+

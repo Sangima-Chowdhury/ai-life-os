@@ -12,9 +12,13 @@ Live Demo:
 Features:
 
 User Authentication
+
 User registration
+
 User login/logout
+
 Password hashing with Werkzeug
+
 Session management
 AI Plan Generation
 Anthropic Claude integration

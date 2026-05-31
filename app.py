@@ -74,7 +74,7 @@ def home():
 
     try:
         message = client.messages.create(
-            model="claude-haiku-4-5",
+            model="claude-haiku-4-5-latest",
             max_tokens=1000,
             messages=[
                 {

@@ -1,3 +1,5 @@
+from email.mime import message
+
 from models import db, User, Plan
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
@@ -62,24 +64,23 @@ def save_users(users):
 @app.route("/", methods=["GET", "POST"])
 def home():
     ai_response = None
-
     username = session.get("username")
     saved_plans = []
+    if not username:
+        return redirect(url_for("login"))
 
     if request.method == "POST":
         category = request.form.get("category")
-        print("CATEGORY =", category)
-
         user_problem = request.form.get("problem")
 
-    try:
-        message = client.messages.create(
-            model="claude-haiku-4-5-latest",
-            max_tokens=1000,
-            messages=[
-                {
-                    "role": "user",
-                    "content": f"""
+        try:
+            message = client.messages.create(
+                model="claude-haiku-4-5-20251001",
+                max_tokens=1000,
+                messages=[
+                    {
+                        "role": "user",
+                        "content": f"""
                         You are an AI Life OS assistant.
 
                     the user will share a life, career, study, productivity or personal problem.
@@ -98,24 +99,31 @@ def home():
                     User Problem: {user_problem}
                     Category: {category}
                     """
-                }
-            ]
-        )
+                    }
+                ]
+            )
 
-        ai_response = markdown.markdown(message.content[0].text)
-        save_plan(session.get("username"), category, user_problem, ai_response)
+            ai_response = markdown.markdown(message.content[0].text)
 
-    except Exception as e:
-        return f"Claude Error: {str(e)}"
+            save_plan(
+                username,
+                category,
+                user_problem,
+                ai_response
+            )
 
-        username = session.get("username")
+        except Exception as e:
+            return f"Claude Error: {str(e)}"
 
     if username:
         saved_plans = Plan.query.filter_by(username=username).all()
-    else:
-        saved_plans = []
 
-    return render_template("index.html", ai_response=ai_response, saved_plans=saved_plans, username=username)
+    return render_template(
+        "index.html",
+        ai_response=ai_response,
+        saved_plans=saved_plans,
+        username=username
+    )
 
 
 @app.route("/download-pdf", methods=["POST"])

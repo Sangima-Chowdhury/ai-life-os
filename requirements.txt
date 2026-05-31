@@ -6,3 +6,4 @@ markdown
 reportlab
 flask-sqlalchemy
 psycopg2-binary
+werkzeug

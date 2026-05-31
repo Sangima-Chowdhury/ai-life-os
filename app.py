@@ -15,7 +15,7 @@ from io import BytesIO
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.getenv("SECRET_KEY")
+app.secret_key = os.getenv("SECRET_KEY", "dev-secret-key")
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///ai_life_os.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

@@ -64,10 +64,15 @@ def home():
     ai_response = None
     username = session.get("username")
     saved_plans = []
-    if not username:
-        return redirect(url_for("login"))
+
+    if username:
+        saved_plans = Plan.query.filter_by(username=username).all()
 
     if request.method == "POST":
+
+        if not username:
+            return redirect(url_for("login"))
+
         category = request.form.get("category")
         user_problem = request.form.get("problem")
 

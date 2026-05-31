@@ -98,7 +98,6 @@ def home():
                     User Problem: {user_problem}
                     Category: {category}
                     """
-
                 }
             ]
         )
